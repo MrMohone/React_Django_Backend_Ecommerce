@@ -17,6 +17,7 @@ def product_detail(request, slug):
     serializer = DetailedProductSerializer(product)
     return Response(serializer.data)
 
+@api_view(['POST'])
 def add_item(request):
     try:
         cart_code = request.data.get("cart_code")
