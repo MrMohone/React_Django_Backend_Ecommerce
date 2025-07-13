@@ -45,12 +45,12 @@ def product_in_cart(request):
     product = Product.objects.get(id=product_id)
 
     products_exists_in_cart = CartItem.objects.filter(cart=cart, product=product).exists()
-
+    
     return Response({'product_in_cart' : products_exists_in_cart})
 
 
 @api_view(['GET'])
-def get_cart_state(request):
+def get_cart_stat(request):
     cart_code = request.query_params.get('cart_code')
     cart = Cart.objects.get(cart_code=cart_code, paid=False)
     
