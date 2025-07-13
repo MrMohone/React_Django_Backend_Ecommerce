@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from rest_framework.decorators import api_view
 from .models import Product, Cart, CartItem
-from .serializers import ProductSerializer, DetailedProductSerializer,CartItemSerializer,SimpleCartSerializer
+from .serializers import ProductSerializer, DetailedProductSerializer,CartItemSerializer,SimpleCartSerializer,CartSerializer
 from rest_framework.response import Response
 
 
@@ -38,7 +38,7 @@ def add_item(request):
     
 @api_view(['GET'])
 def product_in_cart(request):
-    cart_code = request.query_params.get('cart_code')
+    cart_code = request.query_params.get('cart_code')# get cart_code from front end localStorage
     product_id = request.query_params.get('product_id')
 
     cart = Cart.objects.get(cart_code=cart_code)
@@ -51,8 +51,16 @@ def product_in_cart(request):
 
 @api_view(['GET'])
 def get_cart_stat(request):
-    cart_code = request.query_params.get('cart_code')
+    cart_code = request.query_params.get('cart_code')# get cart_code from front end localStorage
     cart = Cart.objects.get(cart_code=cart_code, paid=False)
     
     serializer = SimpleCartSerializer(cart)
+    return Response(serializer.data)
+
+@api_view(['GET'])
+def get_cart(request):
+    cart_code = request.query_params.get('cart_code')# get cart_code from front end localStorage
+    cart = Cart.objects.get(cart_code=cart_code, paid=False)
+    
+    serializer = CartSerializer(cart)
     return Response(serializer.data)
