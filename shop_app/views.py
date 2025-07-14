@@ -64,3 +64,19 @@ def get_cart(request):
     
     serializer = CartSerializer(cart)
     return Response(serializer.data)
+
+
+@api_view(['PATCH'])# used to update specific field
+def update_quantity(request):
+    try:
+        cartitem_id = request.data.get('item_id')# get cartitem_id from front end
+        quantity = request.data.get('quantity')# get quantity from front end
+        quantity = int(quantity)# convert to integer
+        cartitem = CartItem.objects.get(id=cartitem_id)
+        cartitem.quantity = quantity
+        cartitem.save()
+        serializer = CartItemSerializer(cartitem)
+        return Response({'data': serializer.data, 'message': 'CartItem updated Successfully'}, status=200)
+    
+    except Exception as e:
+        return Response({'error': str(e)}, status=400)
